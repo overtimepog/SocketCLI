@@ -59,12 +59,12 @@ def start_tcp_server():
             try:
                 connection_socket, addr = server_socket.accept()
                 client_ip, client_port = addr
-                print(f"\n✅ Connected to {client_ip}#{client_port}")
+                print(f"\n✅ Connected to {client_ip}:{client_port}")
                 
                 with connection_socket:
                     message = connection_socket.recv(1024).decode()
                     if message:
-                        print(f"📥 Received from {client_ip}#{client_port}: {message}")
+                        print(f"📥 Received from client ({client_ip}:{client_port}): {message}")
                         modified_message = scramble_text(message)
                         connection_socket.send(modified_message.encode())
                         print(f"📤 Sent back: {modified_message}")
@@ -96,7 +96,7 @@ def start_udp_server():
             message, client_address = server_socket.recvfrom(2048)
             if message:
                 client_ip, client_port = client_address
-                print(f"\n📥 Received from {client_ip}#{client_port}: {message.decode()}")
+                print(f"\n📥 Received from client ({client_ip}:{client_port}): {message.decode()}")
                 modified_message = scramble_text(message.decode())
                 server_socket.sendto(modified_message.encode(), client_address)
                 print(f"📤 Sent back: {modified_message}")
@@ -126,7 +126,7 @@ def start_tcp_client(server_ip, server_port):
                     
                     client_socket.send(message.encode())
                     modified_message = client_socket.recv(1024).decode()
-                    print(f"📥 Returned from server: {modified_message}")
+                    print(f"📥 Returned from server ({server_ip}:{server_port}): {modified_message}")
                 except socket.timeout:
                     print("⏱️  Connection timed out. Make sure the server is running.")
                     retry = input("Try again? (y/n): ")
@@ -160,7 +160,7 @@ def start_udp_client(server_ip, server_port):
         try:
             client_socket.sendto(message.encode(), (server_ip, server_port))
             modified_message, server_address = client_socket.recvfrom(2048)
-            print(f"📥 Returned from server: {modified_message.decode()}")
+            print(f"📥 Returned from server ({server_ip}:{server_port}): {modified_message.decode()}")
         except socket.timeout:
             print("⏱️  Request timed out. Make sure the server is running.")
         except socket.error as e:
@@ -228,9 +228,9 @@ def main():
         
         # Ask if the user wants to continue
         print("\n" + "="*60)
-        if input("\nDo you want to run another session? (y/n): ").lower() != 'y':
-            print("\n👋 Thanks for using the Socket Programming CLI! Goodbye!")
-            break
+        #if input("\nDo you want to run another session? (y/n): ").lower() != 'y':
+        print("\n👋 Thanks for using the Socket Programming CLI! Goodbye!")
+        break
 
 if __name__ == "__main__":
     try:
