@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 import socket
 import random
-import sys
 import os
-import time
 import platform
 
 def get_ip_address():
